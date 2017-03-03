@@ -2,8 +2,7 @@ import storage from 'helpers/storage';
 import esc from 'lodash.escape';
 import escRE from 'lodash.escaperegexp';
 import unesc from 'lodash.unescape';
-
-storage.get().then(onReady);
+import Fuse from 'fuse.js';
 
 // const sample = [
 //   {
@@ -22,50 +21,47 @@ storage.get().then(onReady);
 //     lastEnter: 0,
 //   },
 // ]
+//
 
-function onReady(_aliases) {
-  let aliases = _aliases;
+let aliases = null;
+let fuse = null;
+let matches = null;
 
-  chrome.runtime.onMessage.addListener((req) => {
-    if (req.aliases) {
-      aliases = req.aliases;
-    }
+chrome.omnibox.onInputStarted.addListener(() => {
+  storage.get().then(_aliases => {
+    aliases = _aliases || [];
+    fuse = new Fuse(aliases, {keys: ['alias']})
+  })
+});
+
+chrome.omnibox.onInputChanged.addListener((text, suggest) => {
+  if (fuse === null) {
+    return suggest([]);
+  }
+
+  matches = fuse.search(text)
+  const suggestions = matches.map(item => {
+    return {
+      content: unesc(item.url),
+      description: `@${item.alias} (${item.url})`,
+    };
   });
+  suggest(suggestions);
+});
 
-  chrome.omnibox.onInputChanged.addListener((text, suggest) => {
-    const re = new RegExp(text);
-    const filtered = aliases.filter((aliasData) => {
-      return re.test(aliasData.alias);
-    });
-    const sorted = filtered.sort((a, b) => {
-      return b.lastEnter - a.lastEnter;
-    });
-    const mapped = sorted.map((aliasData) => {
-      return {
-        content: unesc(aliasData.url),
-        description: `@${aliasData.alias}  ${aliasData.url}`,
-      };
-    });
-    return suggest(mapped);
-  });
+chrome.omnibox.onInputEntered.addListener(text => {
+  if (matches === null) {
+    return;
+  }
 
-  chrome.omnibox.onInputEntered.addListener((text) => {
-    let idx = null;
+  const target = matches[0];
 
-    idx = aliases.findIndex(aliasData => aliasData.url === esc(text));
-    if (!~idx) {
-      idx = aliases.findIndex((aliasData) => {
-        const re = new RegExp(escRE(text))
-        return re.test(aliasData.alias);
-      });
-    }
+  chrome.tabs.update({url: target.url});
+  target.lastEnter = Date.now();
+  storage.set(aliases);
+});
 
-    if (~idx) {
-      const {url} = aliases[idx];
-      chrome.tabs.update({url});
-
-      aliases[idx].lastEnter = Date.now();
-      storage.set(aliases);
-    }
-  });
-}
+chrome.omnibox.onInputCancelled.addListener(() => {
+  fuse = null;
+  matches = null;
+});
