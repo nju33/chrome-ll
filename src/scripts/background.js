@@ -25,7 +25,6 @@ import Fuse from 'fuse.js';
 
 let aliases = null;
 let fuse = null;
-let matches = null;
 
 chrome.omnibox.onInputStarted.addListener(() => {
   storage.get().then(_aliases => {
@@ -39,10 +38,10 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     return suggest([]);
   }
 
-  matches = fuse.search(text)
+  const matches = fuse.search(text)
   const suggestions = matches.map(item => {
     return {
-      content: unesc(item.url),
+      content: item.url,
       description: `@${item.alias} (${item.url})`,
     };
   });
@@ -50,18 +49,22 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
 });
 
 chrome.omnibox.onInputEntered.addListener(text => {
-  if (matches === null) {
-    return;
-  }
+  storage.get().then(_aliases => {
+    const aliases = _aliases || [];
+    const fuse = new Fuse(aliases, {keys: ['alias']});
+    const matches = fuse.search(text);
+    const target = matches[0];
 
-  const target = matches[0];
+    if (!target) {
+      return;
+    }
 
-  chrome.tabs.update({url: target.url});
-  target.lastEnter = Date.now();
-  storage.set(aliases);
+    chrome.tabs.update({url: target.url});
+    target.lastEnter = Date.now();
+    storage.set(aliases);
+  })
 });
 
 chrome.omnibox.onInputCancelled.addListener(() => {
   fuse = null;
-  matches = null;
 });
