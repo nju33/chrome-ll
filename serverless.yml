@@ -1,0 +1,30 @@
+# org: nju33
+# app: chrome-ll
+
+service: chrome-ll
+
+provider:
+  name: aws
+  # stage: development
+  runtime: nodejs12.x
+  region: ap-northeast-1
+
+plugins:
+  - serverless-webpack
+  # - serverless-offline
+
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+    packager: yarn
+    excludeFiles: '**/*.test.js'
+
+functions:
+  hello:
+    handler: 'handler.hello'
+    events:
+      - http:
+          method: get
+          path: hello
+          integration: lambda
