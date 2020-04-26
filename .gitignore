@@ -8,3 +8,10 @@ npm-debug.log*
 
 app/scripts/background.js
 app/popup/scripts/popup.js
+
+
+#Added by cargo
+
+/target
+
+.now

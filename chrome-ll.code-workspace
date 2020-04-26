@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "name": "/",
+      "path": "./"
+    },
+    {
+      "name": "api",
+      "path": "api/"
+    }
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#e5345f",
+      "activityBar.activeBorder": "#1d550b",
+      "activityBar.background": "#e5345f",
+      "activityBar.foreground": "#e7e7e7",
+      "activityBar.inactiveForeground": "#e7e7e799",
+      "activityBarBadge.background": "#1d550b",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "statusBar.background": "#cc1a45",
+      "statusBar.border": "#cc1a45",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#e5345f",
+      "titleBar.activeBackground": "#cc1a45",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.border": "#cc1a45",
+      "titleBar.inactiveBackground": "#cc1a4599",
+      "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.remoteColor": "#cc1a45",
+    "json.schemas": [
+      {
+        "fileMatch": ["/chrome-ll.json-schema.test.json"],
+        "url": "./chrome-ll.json-schema.json"
+      }
+    ]
+  }
+}
