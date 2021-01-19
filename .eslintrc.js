@@ -1,50 +1,37 @@
-function has(name) {
-  const pkg = require('./package.json')
-  const sectionNames = ['dependencies', 'devDependencies', 'peerDependencies']
-
-  return sectionNames.some((sectionName) => !!pkg[sectionName][name])
-}
-
-const hasReact = has('react')
-const hasTypeScript = has('typescript')
-let parserConfig = {}
-
-if (hasTypeScript) {
-  parserConfig = {
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-      project: './tsconfig.json'
-    }
-  }
-}
-
 /**
  * @type {import('eslint').Linter.Config}
  */
 module.exports = {
-  ...parserConfig,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json'
+  },
   env: {
-    browser: true,
-    jest: true
+    jest: true,
+    browser: true
   },
   extends: [
-    hasTypeScript && 'standard-with-typescript',
-    hasReact && 'standard-react',
+    'standard-with-typescript',
+    'standard-react',
+    'plugin:testing-library/react',
     'plugin:prettier/recommended',
-    hasTypeScript && 'prettier/@typescript-eslint',
-    hasReact && 'prettier/react',
+    'prettier/@typescript-eslint',
+    'prettier/react',
     'prettier/standard'
-  ].filter(Boolean),
+  ],
   plugins: [
+    'typescript-sort-keys',
     'prettier',
+    'testing-library',
+    'react-hooks',
     'simple-import-sort',
-    hasReact && 'react-hooks',
-    hasTypeScript && 'tsdoc'
-  ].filter(Boolean),
+    'sort-destructure-keys',
+    'tsdoc'
+  ],
   rules: {
     'sort-imports': 'off',
     'import/order': 'off',
-    'simple-import-sort/sort': [
+    'simple-import-sort/imports': [
       'error',
       {
         groups: [['^\\u0000', '^@?\\w', '^[^.]', '^\\.']]
@@ -52,17 +39,23 @@ module.exports = {
     ]
   },
   overrides: [
-    hasTypeScript && {
+    {
       files: ['*.ts', '*.tsx'],
       rules: {
-        'tsdoc/syntax': 'warn'
+        'tsdoc/syntax': 'warn',
+        'typescript-sort-keys/interface': 'error',
+        'typescript-sort-keys/string-enum': 'error'
       }
     },
-    hasReact && {
-      files: ['*.jsx', '*.tsx'],
+    {
+      files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
       rules: {
-        'react/prop-types': 'off'
+        'react/prop-types': 'off',
+        'sort-destructure-keys/sort-destructure-keys': [
+          'error',
+          { caseSensitive: false }
+        ]
       }
     }
-  ].filter(Boolean)
+  ]
 }

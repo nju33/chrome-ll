@@ -4,5 +4,26 @@
   },
   "appDesc": {
     "message": "It is an extension that can alias a certain page. You will be able to access the page with that name with a simple operation."
+  },
+  "registrationForm": {
+    "message": "Registration Form"
+  },
+  "goToEditPage": {
+    "message": "Go to edit page"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "alias": {
+    "message": "Alias"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "areYouSure": {
+    "message": "Are you sure?"
   }
 }

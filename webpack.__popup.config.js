@@ -1,6 +1,5 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 
 /**
  * @param {any} _
@@ -11,22 +10,17 @@ const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 module.exports = (_, argv) => {
   return {
     mode: argv.mode || 'development',
-    devtool:
-      argv.mode === 'production' ? 'source-map' : 'eval-cheap-source-map',
+    devtool: argv.mode === 'production' ? false : 'eval-cheap-source-map',
     target: 'web',
     entry: {
-      popup: path.join(__dirname, 'src/popup.ts')
+      popup: path.join(__dirname, 'src/popup.tsx')
     },
     output: {
       path: path.join(__dirname, 'out'),
-      // publicPath: '../',
-      filename: '[name]/bundle.js'
+      filename: '[name].js'
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.wasm']
-    },
-    devServer: {
-      port: 33857
     },
     module: {
       rules: [
@@ -48,19 +42,9 @@ module.exports = (_, argv) => {
       ]
     },
     plugins: [
-      new HtmlWebpackPlugin(
-        process.env.NODE_ENV === 'production'
-          ? {
-              template: path.join(__dirname, 'src/index.html'),
-              filename: path.join(__dirname, 'out/htmls/popup.html')
-            }
-          : {
-              template: path.join(__dirname, 'src/index.html')
-            }
-      ),
-      new WasmPackPlugin({
-        crateDirectory: path.join(__dirname, '.'),
-        outName: 'app'
+      new HtmlWebpackPlugin({
+        template: path.join(__dirname, 'src/popup-template.html'),
+        filename: path.join(__dirname, 'out/popup.html')
       })
     ]
   }

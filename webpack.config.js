@@ -7,6 +7,7 @@
 module.exports = (_, argv) => {
   return [
     require('./webpack.__background.config')(_, argv),
-    require('./webpack.__popup.config')(_, argv)
+    require('./webpack.__popup.config')(_, argv),
+    require('./webpack.__edit.config')(_, argv)
   ]
 }

@@ -13,7 +13,7 @@ module.exports = (_, argv) => {
     devtool: argv.mode === 'production' ? false : 'eval-cheap-source-map',
     target: 'web',
     entry: {
-      background: path.join(__dirname, 'src/background.ts')
+      edit: path.join(__dirname, 'src/edit.tsx')
     },
     output: {
       path: path.join(__dirname, 'out'),
@@ -43,7 +43,8 @@ module.exports = (_, argv) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        filename: path.join(__dirname, 'out/background.html')
+        template: path.join(__dirname, 'src/edit-template.html'),
+        filename: path.join(__dirname, 'out/edit.html')
       })
     ]
   }

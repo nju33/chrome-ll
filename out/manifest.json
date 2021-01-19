@@ -7,7 +7,7 @@
   "omnibox": {
     "keyword": "ll"
   },
-  "permissions": ["identity", "identity.email", "storage", "tabs"],
+  "permissions": ["storage", "tabs"],
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -19,11 +19,11 @@
       "38": "icons/icon38.png"
     },
     "default_title": "ll",
-    "default_popup": "htmls/popup.html"
+    "default_popup": "popup.html"
   },
   "background": {
     "persistent": false,
-    "page": "htmls/background.html"
+    "page": "background.html"
   },
-  "content_security_policy": "script-src https://kit.fontawesome.com/1ba52c82c4.js 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src https://kit.fontawesome.com/1ba52c82c4.js 'sha256-ts8aW8Rd9KWcT6JkIPH7pDbl7DgAIgYMSglignYTFjs=' 'sha256-KD8E8s+Y4SbUCYTZ8sbNzljN9csEogfcBifJo0E8+iU=' 'self' 'unsafe-eval'"
 }

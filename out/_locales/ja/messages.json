@@ -3,6 +3,27 @@
     "message": "ll"
   },
   "appDesc": {
-    "message": "とあるページに別名を付けることができる拡張です。簡単な操作でその名前でページにアクセスできるようになります。"
+    "message": "You can set an alias for a URL. After setting, you will be able to use the alias to access the associated URL."
+  },
+  "registrationForm": {
+    "message": "登録フォーム"
+  },
+  "goToEditPage": {
+    "message": "編集ページに移動"
+  },
+  "edit": {
+    "message": "編集"
+  },
+  "alias": {
+    "message": "別名"
+  },
+  "reset": {
+    "message": "リセット"
+  },
+  "add": {
+    "message": "追加"
+  },
+  "areYouSure": {
+    "message": "本当に？"
   }
 }
